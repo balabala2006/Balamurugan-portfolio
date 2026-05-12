@@ -1,0 +1,11 @@
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  transform-origin: 0%;
+  z-index: 2000; /* Higher than navbar */
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+}
