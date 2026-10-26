@@ -1,14 +1,717 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0a0a0a" />
-    <title>Balamurugan M — Portfolio</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+<title>Balamurugan M</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#07090d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: fixed WebGL stage behind a single scrolling column; the 3D core drifts and morphs as you scroll through sections. */
+:root {
+  --ink: #07090d;
+  --ink-2: #121219;
+  --line: #262633;
+  --fg: #ecebf3;
+  --muted: #9a98ab;
+  --ember: #22d3ee;
+  --ember-2: #a5f3fc;
+  --violet: #8f7bff;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --wrap: 1120px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--ink); }
+body {
+  margin: 0; background: var(--ink); color: var(--fg);
+  font-family: var(--body); font-size: 16px; line-height: 1.6;
+  overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--ink);
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
+.grain {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .06;
+  background-image: radial-gradient(var(--fg) 1px, transparent 1px); background-size: 3px 3px;
+}
+main, header.top, footer { position: relative; z-index: 2; }
+.wrap {
+  max-width: var(--wrap); margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Top bar */
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  background: color-mix(in srgb, var(--ink) 70%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.logo { font-family: var(--display); font-weight: 800; font-size: 20px; text-decoration: none; letter-spacing: -.02em; }
+.logo span { color: var(--ember); }
+nav ul { list-style: none; display: flex; gap: 6px; margin: 0; padding: 0; flex-wrap: wrap; }
+nav a {
+  font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .1em;
+  text-decoration: none; color: var(--muted); padding: 6px 10px; border-radius: 999px; transition: color .2s, background .2s;
+}
+nav a:hover, nav a.on { color: var(--fg); background: var(--ink-2); }
+
+/* Hero */
+.hero .wrap { padding-block: clamp(72px, 14vw, 150px) clamp(56px, 9vw, 110px); }
+.eyebrow {
+  font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember-2);
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 4px rgba(74,222,128,.15); animation: pulse 2s infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 9px rgba(74,222,128,0); } }
+.hero h1 {
+  font-size: clamp(52px, 11vw, 148px); font-weight: 800; line-height: .9; letter-spacing: -.045em;
+  margin-top: 22px; perspective: 600px;
+}
+.hero h1 .ch { display: inline-block; transform-origin: 50% 100%; animation: rise .9s cubic-bezier(.2,.8,.2,1) both; }
+.hero h1 .outline { color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
+@keyframes rise { from { transform: translateY(.35em) rotateX(-70deg); } to { transform: none; } }
+.role {
+  margin-top: 26px; font-family: var(--display); font-size: clamp(20px, 3vw, 30px); font-weight: 600; color: var(--muted);
+  min-height: 1.4em;
+}
+.role b { color: var(--fg); font-weight: 600; background: linear-gradient(90deg, var(--ember), var(--ember-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.role .caret { display: inline-block; width: 3px; height: 1em; background: var(--ember); vertical-align: -0.12em; margin-left: 4px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.lede { max-width: 56ch; color: var(--muted); font-size: 18px; margin: 20px 0 0; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 999px;
+  font-weight: 700; text-decoration: none; font-size: 15px; border: 1px solid var(--line);
+  transition: transform .2s, box-shadow .2s, background .2s; cursor: pointer; font-family: var(--body); color: var(--fg); background: transparent;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn.primary { background: linear-gradient(120deg, var(--ember), var(--ember-2)); color: #03161b; border-color: transparent; box-shadow: 0 10px 40px -10px rgba(34,211,238,.6); }
+.btn.ghost:hover { background: var(--ink-2); }
+.scroll-hint { margin-top: 56px; font-family: var(--mono); font-size: 11px; letter-spacing: .2em; color: var(--muted); text-transform: uppercase; display: flex; align-items: center; gap: 12px; }
+.scroll-hint i { width: 48px; height: 1px; background: var(--line); position: relative; overflow: hidden; }
+.scroll-hint i::after { content: ""; position: absolute; inset: 0; background: var(--ember); animation: slide 2s infinite; }
+@keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+/* Sections */
+section.block { overflow-x: clip; }
+section.block .wrap { padding-block: clamp(64px, 10vw, 120px); }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
+.sec-head h2 { font-size: clamp(34px, 6vw, 64px); font-weight: 800; letter-spacing: -.035em; line-height: 1; }
+.sec-head .tag { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.reveal { transition: transform .9s cubic-bezier(.2,.8,.2,1); }
+.reveal.pre { transform: translateY(36px); }
+
+.glass {
+  background: color-mix(in srgb, var(--ink-2) 72%, transparent);
+  border: 1px solid var(--line); border-radius: 20px;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+
+/* About */
+.about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
+.about-grid > * { min-width: 0; }
+.about-text { padding: clamp(22px, 4vw, 40px); font-size: 18px; }
+.about-text p { margin: 0 0 14px; max-width: 62ch; }
+.about-text p:last-child { margin: 0; color: var(--muted); }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat { padding: 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; }
+.stat b { font-family: var(--display); font-size: clamp(36px, 5vw, 52px); font-weight: 800; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat b sup { color: var(--ember); font-size: .5em; }
+.stat span { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+.photo { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; padding: 16px 20px; }
+.photo img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid var(--ember); flex: none; }
+.photo b { font-family: var(--display); font-size: 20px; display: block; }
+.photo span { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+.certs-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; }
+.certs-grid > * { min-width: 0; }
+.certs { list-style: none; margin: 0; padding: 12px 26px; }
+.certs li { padding: 14px 0; border-bottom: 1px solid var(--line); display: flex; gap: 14px; align-items: baseline; }
+.certs li:last-child { border: 0; }
+.certs li::before { content: "\2713"; color: var(--ember); font-family: var(--mono); }
+.langs { padding: 24px 26px; align-self: start; }
+.langs h3 { font-size: 20px; margin-bottom: 14px; }
+.langs div div { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.langs div div:last-child { border: 0; }
+.langs small { font-family: var(--mono); color: var(--ember-2); font-size: 12px; align-self: center; }
+
+/* Skills: 3D sphere + list */
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+.skills-grid > * { min-width: 0; }
+.sphere { position: relative; width: 100%; max-width: 440px; aspect-ratio: 1; margin: 0 auto; perspective: 900px; cursor: grab; touch-action: pan-y; }
+.sphere span {
+  position: absolute; left: 50%; top: 50%; white-space: nowrap; font-family: var(--mono); font-size: 14px; font-weight: 500;
+  padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line); background: color-mix(in srgb, var(--ink-2) 85%, transparent);
+  will-change: transform, opacity; user-select: none;
+}
+.sphere span.hot { color: var(--ember-2); border-color: color-mix(in srgb, var(--ember) 50%, transparent); }
+.skill-groups { display: grid; gap: 12px; }
+.skill-group { padding: 20px 22px; }
+.skill-group h3 { font-size: 18px; font-weight: 600; margin-bottom: 12px; display: flex; justify-content: space-between; gap: 10px; }
+.skill-group h3 small { font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 400; letter-spacing: .1em; text-transform: uppercase; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 13px; padding: 5px 12px; border-radius: 999px; background: var(--ink); border: 1px solid var(--line); color: var(--fg); }
+
+/* Projects: tilt cards */
+.projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; perspective: 1200px; }
+.projects > * { min-width: 0; }
+.card {
+  position: relative; padding: 0; overflow: hidden; transform-style: preserve-3d;
+  transition: transform .25s ease-out, border-color .3s; display: flex; flex-direction: column;
+}
+.card:hover { border-color: color-mix(in srgb, var(--ember) 45%, var(--line)); }
+.card .art { height: 180px; position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+.card .art canvas { width: 100%; height: 100%; display: block; }
+.card .art .no { position: absolute; left: 18px; top: 14px; font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .1em; }
+.card .body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 12px; flex: 1; transform: translateZ(30px); }
+.card h3 { font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+.card p { margin: 0; color: var(--muted); }
+.card .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 6px; }
+.card .stack span { font-family: var(--mono); font-size: 11px; color: var(--ember-2); background: color-mix(in srgb, var(--ember) 10%, transparent); padding: 3px 9px; border-radius: 6px; }
+.card .links { display: flex; gap: 16px; font-size: 14px; font-weight: 700; }
+.card .links a { text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+.card .links a:hover { border-color: var(--ember); }
+.card .glare { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: radial-gradient(400px circle at var(--gx, 50%) var(--gy, 50%), rgba(165,243,252,.12), transparent 60%); }
+.card:hover .glare { opacity: 1; }
+
+/* Journey timeline */
+.timeline { position: relative; display: grid; gap: 16px; padding-left: 28px; }
+.timeline::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(var(--ember), var(--violet), transparent); }
+.t-item { position: relative; padding: 22px 24px; display: grid; grid-template-columns: 150px 1fr; gap: 6px 24px; }
+.t-item > * { min-width: 0; }
+.t-item::before { content: ""; position: absolute; left: -27px; top: 28px; width: 13px; height: 13px; border-radius: 50%; background: var(--ink); border: 2px solid var(--ember); }
+.t-item .when { font-family: var(--mono); font-size: 13px; color: var(--ember-2); padding-top: 3px; }
+.t-item h3 { font-size: 20px; font-weight: 600; }
+.t-item .where { color: var(--fg); opacity: .8; font-size: 15px; }
+.t-item p { grid-column: 2; margin: 4px 0 0; color: var(--muted); }
+
+/* Contact */
+.contact { padding: clamp(28px, 6vw, 64px); text-align: left; position: relative; overflow: hidden; }
+.contact h2 { font-size: clamp(38px, 8vw, 92px); font-weight: 800; letter-spacing: -.045em; line-height: .95; }
+.contact h2 em { font-style: normal; background: linear-gradient(90deg, var(--ember), var(--ember-2), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.contact .row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; align-items: center; }
+.mail { font-family: var(--mono); font-size: clamp(14px, 2.4vw, 18px); padding: 14px 18px; border-radius: 14px; border: 1px dashed var(--line); user-select: all; overflow-wrap: anywhere; }
+.socials { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.socials a { font-family: var(--mono); font-size: 13px; text-decoration: none; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); transition: background .2s, border-color .2s; }
+.socials a:hover { background: var(--ink-2); border-color: var(--ember); }
+.toast { font-family: var(--mono); font-size: 12px; color: #4ade80; }
+
+footer .wrap { padding-block: 32px 48px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* Cursor glow (desktop only) */
+.cursor { position: fixed; width: 340px; height: 340px; border-radius: 50%; pointer-events: none; z-index: 1; left: 0; top: 0;
+  background: radial-gradient(circle, rgba(34,211,238,.09), transparent 65%); transform: translate(-50%,-50%); transition: opacity .3s; opacity: 0; }
+
+@media (max-width: 820px) {
+  .about-grid, .skills-grid, .projects, .certs-grid { grid-template-columns: 1fr; }
+  .t-item { grid-template-columns: 1fr; }
+  .t-item p { grid-column: 1; }
+  nav { display: none; }
+  .sphere { max-width: 340px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+
+<canvas id="stage" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#home">bala<span>.</span>m</a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#journey">Journey</a></li>
+        <li><a href="#certs">Certs</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span><span id="status"></span></div>
+      <h1 id="name" aria-label="Balamurugan M"></h1>
+      <div class="role" aria-live="polite">I'm a <b id="roleText"></b><span class="caret"></span></div>
+      <p class="lede" id="lede"></p>
+      <div class="cta">
+        <a class="btn primary" href="#work">See my work <span aria-hidden="true">→</span></a>
+        <a class="btn ghost" href="#contact">Get in touch</a>
+      </div>
+      <div class="scroll-hint"><i></i>Scroll to explore</div>
+    </div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="sec-head reveal"><h2>About me</h2><span class="tag">Who I am</span></div>
+      <div class="about-grid">
+        <div class="glass about-text reveal" id="aboutText"></div>
+        <div class="stats" id="stats"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="sec-head reveal"><h2>Skills</h2><span class="tag">Drag the sphere</span></div>
+      <div class="skills-grid">
+        <div class="sphere reveal" id="sphere" aria-hidden="true"></div>
+        <div class="skill-groups" id="skillGroups"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="work">
+    <div class="wrap">
+      <div class="sec-head reveal"><h2>Selected work</h2><span class="tag" id="projCount"></span></div>
+      <div class="projects" id="projects"></div>
+    </div>
+  </section>
+
+  <section class="block" id="journey">
+    <div class="wrap">
+      <div class="sec-head reveal"><h2>Journey</h2><span class="tag">Experience &amp; education</span></div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </section>
+
+  <section class="block" id="certs">
+    <div class="wrap">
+      <div class="sec-head reveal"><h2>Certifications</h2><span class="tag">Credentials &amp; languages</span></div>
+      <div class="certs-grid">
+        <ul class="glass certs reveal" id="certList"></ul>
+        <div class="glass langs reveal"><h3>Languages</h3><div id="langList"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap">
+      <div class="glass contact reveal">
+        <span class="eyebrow">Contact</span>
+        <h2 style="margin-top:16px">Let's build<br><em>something great.</em></h2>
+        <div class="row">
+          <span class="mail" id="mail"></span>
+          <button class="btn primary" id="copyMail" type="button">Copy email</button>
+          <span class="toast" id="toast" role="status"></span>
+        </div>
+        <div class="row"><span class="mail" id="phone"></span><span class="mail" id="loc"></span></div>
+        <div class="socials" id="socials"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span id="foot"></span><span>Built with Three.js · WebGL</span></div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ==========================================================
+   EDIT YOUR CONTENT HERE. Everything on the page comes from this object.
+   ========================================================== */
+const PROFILE = {
+  first: "Balamurugan",
+  last: "M",
+  photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCAFoAWgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6nooooAKKKKACiiigAooooAKKKKACiiigAooqOe5htU8yeVI19WOKAJKWuevPF8EZK2sTTH+83C1h3evaheZDXDIp/hj+UUAdpc6haWgzPcRx+xbmsu48X2EXESyzH1AwP1rjzyck5J7mm49qAOim8aXDH9zaxJ7uxNUpPFOqSE4mRP8AcQf1rKxTgtAFt9b1Jz817P8Agcfyph1G8f713cH/ALaGq5FGKAJvtl1n/j5n/wC/h/xpRqF4pyt1OP8AtoagNGKALa63qUf3b2f8Wz/OrEfinVYzzMkg/wBtB/SsvbRigDoIPGlwuPOtYn90YitG38X2EuBKksJ9SMj9K40ijGKAPRrbULS7GYLiOT2Dc1ZrzAcHcCQR3FaNpr+oWeAk7Oo/hk+YUAd7RXPWXjCCTC3cRhP95eVrdt7mG6jEkEqSL6qc0ASUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAVHcXMNpGZZ5FjQd2NY+reJ4LPMNqBPMOCf4V/xrlbu9uL6TzLiVpG7Z6D6DtQBv6h4uLEx2KYH/PVxz+A/wAa56eea5kMk8ryOe7HNRdKM0AKaQA0tAoASlxS4ooAQClpRS4oAbilxS4pcYoAbikpxKr94gZ9TimCWJgdsiNj0YGgBRRTgPXjFIeelADaMUtGKAG4oxTsUEUAMNSQXM1q4kgkeNx3U4pu2kxQB0mneL2GI7+PcP8Anog5/Ef4V0ltcw3cYlglWRD3U15vU9reXFlKJbeVo29uh+o70AejUVhaV4ohutsV2BDKeA38Lf4Vu9sigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiq1/qEGmwGadsf3VHVj6CgCW4uIrWJppnCIvUmuQ1jxJNflobfMVv0/wBp/rVPVNVuNUl3ynai/cjHRf8AE+9UTQAuKDSZooAKWkFLigBaXFApTQAlKAKAKMjOKADpmgciq2oahb6fFvnlVAe5NeZ/ED41WehW8ljozJNqLNs3tgpD79eT7UAdj4w+IGj+C7cteyGW5K7ktosbm+p/hHvXjmu/HrxDeysNNiiso2BARVDsPcn1rzDUtf1DUr+a4vLt55pWO+V2yzn+lJ9sOCRGFiB5YHb+VUkM6qXx14kbPnapduWAyPMypNUl8S6zbSbkvHjlJ+/G53Vzf244L/vD3BPQ003zthz8rYyvPBo0A9H0b4t+LdKcI10lzEvBEwB/DNd/o3x7019serW0kMnALRLuGfWvCY9R8yIqyqdw2spHQ+v1qO4gGwugIbAxg9BQ0B9X6X8Q/DerKpg1OEFjjD/KR9c1um+twyr5q5boPWvjCN7vzA58yMrz1yDXTaJ461rTUEMN/KsYxtjkYuv4A9KVgsfVwmRpDGM7lAPTg5p/avnKP4r6ika3G7yL+I7lcfMsn+yw9COK9I8O/Fm11DTU1C88qKMSBJ1DfPAfUr3X3B/A0gsei4pCKr6fqVrqkCz2kySxt0KnNWiKBEdAFONJQMTpWtpHiOfTyI5czW/909V+n+FZJFJg0AekWt1DeQrNBIHQ9x29jUtee6bqVxpk3mQtwfvIejD3/wAa7bTdTg1SDzIWww++h6qaBFyiiigAooooAKKKKACiiigAooooAKKKKACiioL69h0+2aeZsKOg7sfQUAM1LUodMtzLKcnoqDqxrhL+/n1G4M87ZPQL2Uegp2oahNqVy08x9lXso9BVbFABmijFGKAEAzS4p2MUlACYopw6UYoASnCilFAC4qtqV5HY2kk8skUSxjcXdsBR3NWJWKRswBJAzgV8yfF/x9feJdautOWYwabp0nltEjZEjjqT60AXfiR8UJNR22lpKqlEaJmOGBOeSO3Iwa8onuftI/ef6wtuJbsT3qtcTpPOCnTGcnkCoZZ2lcRsRkcEgdMUwLLPDGu9cZ6bm/pUIuVkbLI7KBnJPSonZA28vkjheOlIrSFtxAVM9u9MZO7SS7mBZFQfMOv4Uir/AKKdxL7vlVTxTslxuJAGclfX60NPGATtbaRhQM/pQIbb3pt3+Y/OvBDnnH9atLfKRmN9qDqAePyrJnO5stA/Ax1qHbtJKEj2zSHc6IXkkhBSboOwyCKjj1OJ8DzVRgT8rqcGsW3uXX93nqePanzOXOOhUYZRSuBvDUj94NEcdQDzVuz1IvI7rJtDLsdM8MO1cfkPxuwR0PSp7W7kSVQTkjjnvSuO53nhzx9rXhfUxNZ3MkUYbJhLbkk+or6W8B+PbPxvpqXEQEdwMiSLP3T/AJBr5Bkl3OHOSBwAT1NekfAzUZ7HxkkULHy5o2DqT94j/JoA+nc9PelHShSH5/KlNMQnU0hpaQ9aAEqazvJrGdZ7dtrj8iPQ1AaOlAHf6Tq0OrQb0+WRfvxnqv8A9ar1ecWd5NYXCzwNtdfyI9DXe6bqMWp2qzR8Ho6Hqp9KBFqiiigAooooAKKKKACiiigAooooAbLKkMbSSMFRRksewrhdZ1V9Vud3KwpxGv8AU+5rR8Uav50hsYW/dof3hH8R9PwrnqACl60CloASlFFKKACkNOoBxQA0Clpe9AAoASnKM0oWgcUAY/i/WDoHh+91HBxBCzggZ5xxXxNqN5JdXct1dyeZNOxdtvAJJ5r7a8Z2gvvC2pwNGZd1u4CDucV8RXSFDj5nIO0gjuKAGQESyZYkKvKjrk+9LIFiJJxhhweppbaRwXQqPp3qKZkZsYye+D0/GncYkLryFRmUfp+FPZnzuwIwPUZqO3c78Rjr2HateKznkjLEEt6EcD8KlzS3KjBvYx2Z2Od0mfrinwFi+GZnI7A1rW3hXVNUk+SEog/iI610em/Dy5tMNK2WI6Y5NTKokaQoTl0OSSCSTJUORjkEcVTltjuJWPA+letWngpkjzNHg4+5xTn8B27lSU246+9ZOujoWDbPHJLSQKSM4HrUJdiArA5HevVtQ8GRR7gAoA6cVzl14RbO4KCe+KSxCe5M8HJbHFbmGPapAAsgPatfUtDksvnCEj+VZcUJ3qTuyOxFbxkpLQ5ZwcXZl+0jee4TacbuFGcV7n8KvDDW93BdsI1LDbvQ5ZR3ye1eK6FYSarqtvYI4WSaQIrN0BPT8M4r6w8F+Bba10ixmux50hgRtpyoU4+YcY78UyTtLd0eMbMbcYFPxUVvaxW4xGmxR0GanIpgMo7UuDSYyKAGk0gp1JgUAJVzS9Tl0u6EyZZDw6f3h/jVQim0AelW9xHdwJPCwZHGQakrjfDWrfYp/s0zfuJTxn+FvWuyoEFFFFABRRRQAUUUUAFZmv6p/ZtmdhHny/Knt6mtJnWNS7EBVGST2FcFq2oNqV68xzs+6g9FoAptknJOT60mKXrQKAExSgU7pQKAExSilxRQAmKMU6jFACCgCjFHSgBwpcYpAaWgAZFkUqwBBGCDXxt8UdCTQPHWs2K48sS+YgHHDcivssV8xftIaYLTx1DdDA+2WqsfcjigaPGlOyUk55GPpV7TdKudScDYQmewqfTtKkv7tIokLEnH0FelaZpEenWyIUUuRyRWNWpy6I6KFLmd3sc3p/hWG2QZXJPfFdRpmgwsqgoWyfSpgsMM6/aZFUHnGe1b1lrekW20LLGa5XdnoQUVoael6EkUKAwrgDjitSLSYd+TCC3rjmqlv4t0+JNhlQk9Mdq04dagkAdMY/nUuoludEYX2Im02OMfd6VC+ktIMxqAR61NqOrhIfMUAgdq47VPHd1AzCGMsAP4eTSUlLYcrRWpp6lozquW2k+1YE+nBHG4c+1Ubrx7qs5ISxIUDq5AzWdH4uvre4V7qGNw3VVcdKpUm9TnniI7GneaJb3MZV1Gf515trGlPbXckG0jaeMeleqQanaakgkt32PjLRPwwrM17R49TgygAlA4YVcJuDszGrTVRXRzHwz0w6j4/wBEtVAybhWPH8IBJr7ESNYkWNAAqjAA7CvmH4C6eW+J0Ktn9xBK/wCOMf1r6hau1O55rQ3FFFJTEBpMZFO60lADSKQilJooAbTTTzSYoAb2rtPDOq/brTyJWzNCMHP8S9jXG4qxp182nXkdwmSFOGH95e4oEeh0U2KVJo1ljIZHAIPqDTqACiiigAoopHZUUsxwqjJPoKAMLxXqPkW62aH55uX9l/8Ar1ydWdRu2v72W4PRj8o9F7Cq9ACUopM0oFAC4paBSigAoxS4owaADFLilGBRmgBpFJSmigBKcDSUoFACrXiH7TWi+ba6Lq6IDske2du/IyP617gK8z/aFtjN4A84dYLuJvwOR/WgDxzwZpPlWf2tgMyEhfoK1NVvhp6BtnmP0A7U7wmwbQIWHJXKn61BqKiW6aSX/Vx8Aeprhm9bs9OmvdSictdQalq8jSZZyT1zgKKpPpl9ajDXESA9y+K09W1e4b91buLaIdWPU/QVkXsCR3AjuLW98wKrsXUKcN0PzetaRc3sZzjBbss6eLuObAu0kHsa77w/qZjthC8hLg9T3rz+OxntbO3vpIXSyus+XI+OoOCMjgHPrWvpF28UwRjv2OMH1FY1ot7nTh5qOx6Hq120Nlk8EjNefX8YZ3ZpXDt/Cp6V3XiiT7VpFtKq7WCg/WvN76ST7OdodpZHIJUdB9e1ZQp2lY2rzurtGey2gdt8U0xzyS5rQsv7HZxuthEx4+aq+o2lzpt5BZwz2rmaBZQ6KCMkkEZY44xzU0yv/YMF3LLa3cjyOn2YJtlCg4D5HGD711OLtucMZK9rfgbJsYxtkgZlUEEFT0rorRhLCrg7vw71yeiNMiL+5mQej8112lRbdynIz8wzWDvezOhWtzRLfwNtgnxK1OTIyto/H1YV9AmvAPg3dW2m+Pddur65it4hAUDStjLF+g9a99gmiuYkmgkWSNxlXU5BFehDY8ua1uBFIaeRTTVECZ4pKXHNGBQAxqBTiKbjFABikPFFB5oATNMJp+MCmEUAdX4P1HzIHsXPzR/Mmf7vcfgf510dec6ddtYXsVyp+43I9R3H5V6KjrIiupyrDIPqKBC0UUUALWR4mvPs2nGJTh5js/DvWtXH+KLrz9S8oH5YV2/ietAGPijFLRQAmKUCgCnUAIBS0opetADaWlxSGgAPNFFGaAEpcUGgUAGKWlpKAHKuTXh/xH8fy+JtK1bR7exie2WQxqdxEm5G+96dR0r2y5l8i1mm/wCecbP+Qr5hsN13JdXzEne7MAD3JJNYVqjhax2YWjGopOQvgl5Bocsb8MszDHp0qS/tJJwdj855p+hmMRXiwnIa4ZvpkCrkcZSQPjOffpWE3d3OmkrKxxd1oRjuhcM00cqHcrkZxipdQuhfXf23ULtppTGIsoNpK+/v716JHpgv4srj6YzmhPBaOSzqD7KAMUe0tqX9XueciS4urW30+GF1sLdcRxyHj16f41e0rTAGUkZYt0ArrNR0NNPiZUUbmHGOtN0HT0tn33IxIPuof51nUnoaU6NpWOk1jRjN4XtZVXLIDlcdq86n8PLdzPGjvDIeRg4BNeu29/E9qsMmCBnIzXKalbW8t8ZbNgNvXPQmo9orqzN50rrVHn7aNrdoceTHOqdNy1ettPv58M8EMAPU4ya9A0m/tZJvIuEAYDnnrW41pYld6ou2rdRdTOOH6o4Cx0cwRhnYn13U52MMox0rp9TiiZDsOO1cxIoSbYQcUlNPYVSnyoyo4xbXepXEUQkuGcvn0XAr2D4L6hJfeEpI5XJe3u5E5PQHBH868WsdUZdavYDtEbsFBI5PGMZr2T4K6abLQNQlO79/eNjPoox/WtabftTmrJfV7noRptONNruPLEzRRikoADTadRjFADCKKXvRQA00008kUw0ANIrtfCl79p03yWOXgOz8O1cZWz4Vuvs+p+UThZlK/iORQB2dFFFAhHcRoznooya88uJjcTyTMeXYtXaa/P8AZ9KnIPLDYPxriMYoAUUYoFLmgBRRjNANKKAExilpcUmKAFpCKWg0ANxS4ooxQAUCiloAKO9FLQAkkYnieFvuyKUP0IxXzBrlpLo7S6Si4HnSR5Pru/wr6hFeB+PNMaTxVqdrJlY/NM8ci8FG4/SufExvE7cDO0mjk/DW20e9sVOfJYfjwM10Fs8aqN4GTXI6XLNa6vqPmmMyMQW8voSRW1Hdeaw5wawqLQ6aT953OpsdREZCqQB1GK1G1QeXlT061xcV0xmSPBIbrWf4l8Xx2GbWE5k/jx2rnUZN2R3e1hFXZ0d5qouHd1YMV6Vz2t+Jp/Nij0qCGacndI80m0KPT3Nc7FrF7qCCCyUnfnJHb6msmLwnql5eNvuBGN2GbJO2t1RX2mcs8S5fAj1N/E6jSWdU2XCDDITnDfX0rjtN8avHPJaXF2l0rNuDhPLwc8geo+tVn8KanLbtavrMuzvhOv41LYeB9Js4t1zNLJJtwTvwM+1SqMIrUqVarJq2h1M98kqpdWcql1HQfyrodN1v7VagFsHHzDPSvMLjTpbKPzNOuzJIxz5Z4yKr6N4ouLK+2zIVYn94p9PUUnRUleJUcU4O00em3upYytY/2jdIA7dTTbiYzjKnIIzWc02JCWbAXvWVOOpded0UNJgbUrqSE4XyJzK8r8AJ3r6P+HKIvhCyKHIcu/5sa8H8HW5ubGbfL+7kllBAHX0/A19A+CIkh8K6ekf3dhOfU7jXdStzs87EP9zFG2RzSYpxpDXScA3FJjFOxTTTATvSNRmjrQAlFBNGeOaAG4zzSGncU00AN5zT4Jmtp45lPMbBvyptIPegD0yNxJGrr0YAiis/w9cfadIgJOSo2H8KKBFLxdNttoIh/G5J/Af/AF65et3xbJuvII/7sZP5n/61YVABmlApMUoFAC9KcDTaUUAKaCaKKAEBpaMUtACYpRRRQAlFL2pM0AFLSUtAC15j8TtCmTUDqgjZ7eZVVnVc7GHHP1r04CnYzx68VE4cysaUqjpy5kfJGsPHp2utIsUiQ3EYCOykByOCR60st35caXCFR82SPavSv2ldDkfT9J1iFcLbu0EhA6BsFf1zXj8dwbjTQNoB24P1rGcLJHTSq8zZ2CzAR+ZFjcUO0k+1eYSTRPeOt9JIg3sC2CRnNd74duPNs0ilPKjHPeov7Dt572Qsq/McjIzzWUHyto6akXUUWSeBLNfFFyum6UBBBEyrJI/U5OCcd69e0v4MwLDi61SRpRd+S4QKqlCQB+J/rXlOmaEumztLaM8ch6hGKnH1Haup066tIJpLq8W9+1yTC4eTzC26QDAfB4BHY0tL7m0ISa0PX7P4TeGdMu3W6LTRSRhgk8vAweT2rmrvTPhfa3MOnS3Np9rS6kRo5N3zcHAJxjbxwc4J6VzDalZXMxmka8n3HcTNNuI+mahvtXtXjKw2bSuBjMj5A9sUpcppGhJauR578QNLgj1W2j8MXbFFQGSQfdyck8fiBjtiuafQLqPVYWuZi8suNwUYAr0OS1jNwZ5dpkPIVei+/wBao3CILtJgo3KcCiNS2iMKlK71JpylpakE42rjmuPv78ukwDEFeT/StzWZ2kDIGwG6n0Heucktf7QvY4YuTPKsYX1yQKKMe5GJl2PoP4c/DbR5/Bej3d7HObieHzpQshUPkkjI+npivSoYYrWFIIEWOKNQqIowFA7UzT7SOwsLa0hUCOCJI1A7AACpq7VFLVI82U5SSTewtIaAcUlUQFIaWkoAaVpMYp5pDTAaaTGadjNJjBoAQjFMNSNTDQA2g0UhoA6vwZNutriHP3HDD8R/9aiqfg2XbfTx54eLP5H/AOvRQIZ4mbfqzj+6ij+v9ay8Voa+SdYuPYqP0FZ9ACUoNKeaAKACnCkxTh0oASilppoAXNFAFL2oASilxSYoGFIKXFIKAFpRSUooELmlBpMUUAcn8WdFGveANXtxkSRxeen+8nP+NfKNhc+UskD/ACnHQnvX2nfxxXFrJaTOi/aUaJQxALEgjA9a+MPFFo+ma0zCPZCxIyBjDjg1E1c0pu2qLdnftbTBcnGc1tWmprLJhW3E9K4c3+Sw3cjue9FpqskMpJPSsfZXOpV7HpsE8kvzYyV71U1i01O6RXtZ5scAqD2rJ07xFhQOABjNbtt4lSRTEhG7Gck8EVm4NO50RqqStc5KT+1mnCIJkUtgbn6EcV12kaJfwnzbmQ8j7obrWHf+IIYJVkQZLjkEYwc81of8JW8kCkFSNucGnNXRNNxi73Ne4Rrc4PAPSsLUNQWK4Cqw4qlqPiyRwqq3Cqc1y8+pSSz+aTkHmlGkKpiEnobOqaiZ1jVThjknHpXb/BjwSfFGupqd2jCz09g6/wDTR/8AAVxPgrw/c+NPENtpVuxHmEl2/uIBya+t/DPhqx8KaVFp1gm2OMdT1YnqT/ntW0IWOSrVcjUxgYopetJWxgJ0opcZoFACUhpTSHmgBppKcRSUwDGKQmlpOKAE60004mmmgBhFIadSGgDV8LPt1mMf3kYfpn+lFReHTt1q19yR/wCOmigRNrv/ACF7n/eH8hVCtHxAuNXnPrtP6Cs/rQAlOA4pMUvSgA5paTNLQAZpMUdKDQAtFJS0ALmjrSUuKBgaM0daMUCA0ZoooAcPesnxZ4ls/COg3Wr3hG2FcRx55lkP3VH1P6VoXV3Bp9rLd3UqQwQqXkkc4CqOpr5Y+K3xIn8catthLxaXbErbQk9fV29z+grWlT535EylY7z4Fy6r4++JGpeK9cuXuE02HbAhPyRyykgbV6AKgb86pfHPwK+na1Ndxw/6DfMZI3A4Rz95f6is79mvxQmleMLnRp5NkerRjyiTx5qZIH4gn8q+mNY0Wx8RaZNp2owrNbyjBHdT2IPYj1qq8L6Doz5Xc+Ab3TLizmYrk+xHWqTlyTuQqa9v+JfwwvvCF3+8Qz2MpIgvAvB/2W9G/n2rze50kjPy9M8+tcXtHF2kdboqSvFmBBePEu3cRjuOuKsx6xJbnKtu71I+j7mJC7eO1RJoczH/AFinHYrVOcXuQqc1sQXGovMVJDYzQNUnZAuSB0H0q+PDsxILyiPuMDrUjeHTHje244yQO1TzwH7OpuZUl3JMrKp7cmr2laVcajMqgFIhwzn0rUsfDcKoGIdjnPPSultLZYwqKgVQOwrOdZJe6a08M2/ePSvgB4WtLW71HU0ixJFEsCv/ALxycfgBXtRrifg7YpbeEDOpBa4uHZvUYwAPyFdsRWtJPlVzCtbnaQnSkNLikNaGQUCkpc0ABppp1IaAG0d6DRQAhpuc049KaeKYCUhPNLSGgBM0hpaaaAL+gf8AIYtMf3/6Gin+HV3azbexJ/8AHTRQIt+Jk26qx/vIp/pWVW74tjxdW8n95Cv5H/69YVABS000oNAC0UtFACEUUp6UmKAFoAopaADFFFLQAmKKUDJ4rk/E3xQ8NeFw8c14Lu6X/l3tSHIPu3QVUYuTskJtLc60DJrn/Enjzw74UQ/2lqMSyj/lhF88h/4CK8O8W/G3xBrnmQWTjSrM8bID+8Ye79fyrzW5vHkZnd2ZmOSzHJJ+tdUML1mzKVXsd98T/itdeM5TZ2RlttITBWFjhpW/vPj9BXmMjEk5qVXLRgnntTGFdPKkrIi99WLY39zpd7Be2khjuLeRZY3H8LA5FfcHw/8AF1r428M2Ws25UGdAJox/yzlHDL+f6EV8NEc169+zj46/sDxO/h+8l22Wqf6rceEmHT8xxWFSN0aRZ9S6hptrqlnLZ3tvHcW0o2vFIuVYfSvBviF8DLvSjJqPhpXvLIZZ7Q8zRD/ZP8Q9uv1r6FiIYYpWj9K4pwUlZnRTqODuj4gewWRipQqynBBGCD6EdqQabt6Cvqbxz8JdI8XK93BjT9VI4uI1+WQ+jr3+vWvA/EHhrVPCeo/YdZtTbyH/AFcq/NFMPVT3+nUV5tWE6evQ9WhUp1dNmc5Bp4DgHIB/Sr02lxRruYgn19ati3EiggDHqKbLHKcKx+UVzOdzrVNJbFKG3XPSpyEj+ZztVeST2FShBHluABTdA0O48e+LLPw1Zb/KlO+8kUf6qAfeJPbPQfWtIJzkkjKbVOLbPXfAuur4U+Fml65qqFLS/v1UuP8AllFJuCufbIGfY16MCrgMCGB5BByCK5D46aZBZ/BvU7KziEdtYJbtGg6KqSKP5GvIfAvxs1nRdLtrG5ii1K1tVEYVztkVO2G746c17caPNFcp4EqnvO59G9Kaa5Lw18U/DHifbHFeizuj/wAu90Qhz6BuhrrT+lZyi4uzGmnsIRSUppMVIwoNFFACEUlOptADaSlNIaYCYpCKWigBtIRTjTeaANbwsm/WEP8AdRj/AE/rRVrwdHuvLiTH3Ywv5n/61FAi/wCLIt1nDLj7j4P4iuWNdxrUH2jTLhB1C7h9RzXD4yM0AFAFGKUUALSgUmKcKAENFKRQBk4FACUorC17xx4e8N/LqGoxCb/njF88n5Dp+NefeIvjwgieLQrEq/Tz7rnHuFH9a1hRnPZEuaW563PcQ2kLTXEscMS8l5GCqPxNcF4j+NGgaRuh04Pqk44zGdsQP+8ev4CvDdc8Wapr05m1K/nujnIV2+VfovQViS3JYk5NdkMGlrJmMqz6HbeKvin4g8Rh4pLv7Lan/l3tsop+p6t+JrhJ52bnPWmSSZ71C7E10qKirJGd23qJI+c81WkORipG6c1GR71LGgh5i6cgmjG4VWkuZbUlfIMkZ53KeaIdQt5WwXKH0fis+dXsykmTMtJFLLbTxzwu0csTB0deqsDkGnuc/dIIPeom44pSQ0fbPwo8cJ428JWeoMw+1KvlXC+ki8H8+v413StnrXyL+zp4yOg+LTotxIVtNVwqZPCzD7v5jj8q+tovmUEVx1I2ZvF3JitZ2veHdN8S6dJp+qWkdzbv2YcqfVT1BHqK0lJXg9Kf5fcVk1cpO2qPmbx38ONT+H8rXkbSX+is2BPt+eD0WQD/ANCHB9q5E6ikw+RQOK+ofGnjPQfDVpNa6nLbTzyxE/YmddzqeMsD0U+9eNy+DfAGsWcl7aa6ujSSAubbz0ZI2PYA84/GuGrgW3zQR6dDMLLlqHmN5PdX1zDp2nQPc3tywjigiGWdj2r6T+Evw2j+HmgYn8uXWL3El3OvPPZAf7q9Pfk1yfwfX4b+HNSNiviC1vPEsp2NPcIY1f8A2IS3GP1P6V7c6YJzxW1Ch7Na7nNicT7R2Wxw/wAWrMXfwz8TwbdxbTZmA91G4fqK+KdCvjEVcjIYYI9q+8PEloNR0u9tGHyTwSRH3BUivgqWxk0i/e1kBHltgZ7jtXoUXY4Jo3Z02MJIzw3IPrXT+Fvin4j8L7IYL1prZTzb3Pzp+Hcfga5GC4wvlvkxnke1NnZAwy3zdsdxXZZNWkY7ao+jfDfxy0DVlSPVEk0yc8En54j+I5H4ivQLK/tNSgE9lcw3MR6PE4YfpXxekxQ8HpWvo3ibU9FmE2n3s9s/XMbkZ+o6H8awlhYv4XY0VVrc+vyaSvEPDnx6vIQkWtWiXacAzRfI/wCXQ16h4e8deHvEyqLDUIxMf+WEp2SD8D1/CuWdCcN0aRnFm8aM0pHPIpDWRYlIaXNFADMUEUp60GgBpOBTSCacaSgDq/B0G2znlP8AHJgfQCitDQrf7NpVuhHJXcfqeaKBF9gGBB6EYNcBeQG1uZYT/AxFd/XKeKbXyr1bgD5ZV5+ooAxRTuKbSjrQA4UtNpw9TwPegDG8V+LdM8G6Q+papKVjB2xxr9+V+yqP69q+fvFPxy8Ra60tvazLptk/Hl2/DEe79TWZ8YPGzeLvFcwhlJ0+zJgtlB4IB+Z/xP6AVwRbmu+lSUVdrUwlJvY2TevMS28lj1JOc0hnYjGSD3FZUUpB61Z3lhuHUfrXXGdzJxLHmZNMLVGHzz2pc4FO4WAkZxTWNG6mmlcBDTMcVJxjrTCakY0j1qGW1in++gI+lOuTJGm+MZZecetLHIs0YkQ5BqHZ6FIFUKoAAAHAFBFLnjFKeKQx1rPLZ3EdxBI0csTB0deqsDkEfjX3L8NvFcfjLwlpusKV3zx4mUfwSrw6/mPyIr4WGCa92/Zj8cxaZqd34XvpdkV6RPaEngSgYZfxXB+q1jVjdXLg9T6i2givNvi18YrHwCiaRYSRXGvXK5CZ3LaIekjj1P8ACvfqeOvU+JfEb6LbCO1jaW6k/ujPlD+8R/SvmL4i/DPWIr+41+CWXUBcMZZpGOZCfU+tYUlFyXMaSTtdGDfyvqd3Pf3csl3dTsXknlO55T7n+lVo7beQQi4B9KoWN46kJKcIO/pW3HhlBXGD2r3YWa0PPlcZNawTRnzFBC84I6V7Z8FPifc3kUXhzxBdmaRsrYXMn3io6Ru3c9cH8K8TuYmeRYIRvllYIox1JOBXqFx4IktUgWyVlNkqfOvBDjqw/GuDHtKy6nThk3c96nizGcjjmvjz42eFTpGsG+gTELHDcdM8ivqvwpr7eINEV5xsvIBsnX1IH3h7GvOPjT4WXVfDkxVPn8s8+/UVxQZu0fMlu2+AUrBdwYjnGM1X09/k2H6GpncIxU5A7Gu5PS5zsUrjnqD3pQ2DSKSOPWkGRVCJVkK96tQXbxMrIzK6nIYHBFZ5fFCvQpCsepeCvjHqmg3kMOr3Et/psjBHEh3SRf7Sn+lfQltdQ31tFdW0iywzIHjdTkMp6GviuSTdC655xx9a95/Z78XtqWm3OgXLlpLdftFvk/8ALM/eX8Dg/ia5MTTVuaJrTk9mevGkoNJXEbgTmkJopKAEqa1gNzcxQKOZHAqI1teE7Xzr9pyPlhXj6mgDr1UIoUdFGBRS0UCErN8QWn2rTnIGXi+df61pUEAjBGQaAPOgaWrWqWRsL2WH+HOU91PSqlADq5X4qeIG8NeA9UvYm2zyR/Z4T3DudufwBJ/CupFeOftJ6pt0rR9JV8GaZ7lx7KNo/Vj+VaUo800iZOyPnqQkt9OlKE9amWIcsfwpr4BwK9C3cwuMI9qmheoSTQrYNFxk+drlR0PIpdx59aikbKhh1Xmn5BwRzmquKw+gmm54o60XCwDpikxQRil607gJnIxVNP8ARbnYeI5Tx7N/9erhGOahuYhNEUP4EdjUyBDyOaO1RW0xli+b76Ha1SLyeaSdxiHir+h6o+jatZ6lHktbSrJgd8Hn9KosuaReDg9KTQ0fd+kS22saVbahGRKJkVw55LKwyCararoI8h/s4BDfwHp9K8//AGcfFY1bwsNKmfdNYMYDk/wHlD/MV64wwCj9OlcclZ2N0+p8tfFLwSmizjWLOLyrWVis0WP9XJ6/Q8Vxun6qEDB45ZFHI8tCa+hfjZFbxeELuN8ebNIiJx97J5/SvALKeWGYQzLlM8YHSvTwspOCbOSslzHR/D6Uax4+0K1/s66QPchsuoI4BYZx06V9P2ulI1thl5fk5r5Tsr99J1W0vo3eNoJ0lVl4IwwNfX0cyTHzIseW/wAy49DyP51z45PmTNMO9DNi0WKyuVu7f5GIMbqOAwNU/GFj9q0WcBd21c4roJh+5J9DmobqET2roRncpFcaN7nwlrth/ZHiXULTGFSYso9jyP51FIAe2Qa6z4zaWdN8ZmTbgTR/mQcVyanfGD6V3U9jnmtRnCsME49KazYcg+tOao35aruSDGo91OHNNIqWMcH9a634La3/AGP440h3fbHLK1rJ/uvlf8K43pT9EujZXkVwhw0NwHH4NmolqrDWh9wMOcelNxTLa5W8tYbpDlZ41lH/AAIA/wBaeTXmnSNNFKaQ0ABrtfDdl9k0xGYYeb94f6fpXKaXZHUL+KD+EnLn0Uda78AAAAYA4AoEFFFFABRRRQBjeJrD7RaC5QZeDr7r3/LrXJ16KQGBBGQeCDXEarpx068aMD923zRn29PwoApivmr4/wB+9/4+NqrZSztYovoSC5/9CFfSoBJwO9fJnxH1SPV/Ges3kLh4nunCuOhVflGP++a6cNG8mzOq9DlHIAwOg6VB9akkbJqI12sxQUhHNB6UZNQykOUjoelNiPBXupxQOvNNY7Zf94UrjJs9MUbu1RgnFSJVIQ71zSjgUmc0D3pgK2TTetOppFMRVlxazrN/A3yv/jVojHI6U2VFkjKkZBqK0f5Whc/NHwM9x2qNmMmaoz1qQ0wjvTYHonwP8Uf8I543t4nk2W2oD7O+em/qh/Pj8a+w123EKyj+IV+fltPJbypNExWWNg6EdmByD+dfcPw58Rx+KPCVlqMbAmaBZCPRsfMPwINc9aPU0g+hwHx2bZZ2MLH5TPux68GvF2iBYMDgBsfhXtXx4iL21hKfu+aMn04NeNspkOB0Hb1r0sL/AAkc1b4ircZK5z0GOa+hfgf4tbXvD50q5kL3emhVBPVoj0/I8flXz5MMIcDPPX1rrfhHrx8P+OtPMj7be7P2WXns3TP44qcRT54MKcrSPqRo8wsD6VVXLRir6DKkH6VSQY3D0OK8hHYfN/7S+i+V9i1JE+5KUY/UV4tbtlMeor6k/aA0kX3gq/YLlolWZf8AgJ/wr5Wt2+UV2UnoZVFqSNTWHPTmnkgUyTnac1sZjOaRqeW7VGTUsaGN7mobM43/APXQ1IT1qKz5B93NZvco+zPAl2L/AMFaJcA5zaIp+o4/pW2a4P4G6h9t8AQQsctaTPF9B1H867xhXBNWk0brVDSaSnDmrmk6cdSvkhwfLHzSH0X/AOvUgdD4V0/7PaG6dfnn+77J2/P/AArcpFUIoVQABwAO1LQAUUUUAFFFFABVHWNOGo2hVceanzIff0q9RQB5R4s1D+xvDerXrEo9vayEZ4w2CB+pFfHVzLuOxOQOp9a+r/2oNJ1hvBn23SY91kswbUgv3gg+63+7nr+FfJG/dkL0HU13YZWiY1NyNzjpTM96HbnrSA5FbNkoXNLnIFNPWkNSMUnmmSkgK3oadmmTAmJh7UhkqtxTweeKrwvuUGpAfyppiJgacKiUmn5PSqEOzig0D3oPIp3AQiqtxmKRZ1H3fvD1WrPShkBGD3pNXAXIYAjkHpTTVe1Yxs1u38PK+4qyQMUJ3QEeOa+iv2XPFQP27w7M/MR+0wAnqjHDj8Gwf+BV86tkGul+HXiaTwl4y0vVkfbHHMscw7NEx2uD+Bz+AqJq6sVF6n0r8d7fPhSJwuTFcKD9M14c42kEkHA555r6B+NMQufBF6ynONkoI78ivnuXDtuYbTnFdWCl+7sZVl7wyUbkIyOOc1AkjW1zHcRnDxESKfcHP9KsNtzIAvQZ3evFVMbsE/lXS0Yn2VoGoDU9LtLxT8txCkg/FQam+7LIvvXJfBzVF1P4faSS26SBGt3+qsR/LFdc4xdN7ivClHlk0d6d0mcl8QtPGo+H723K58yB0x9Qa+KoVKEoeqkg/hX3Xr6BrdgenQ18Q65amx8QanbYx5V1Io/76NdFF6EVCs4qNhgA1ITUcmSo+tbmQ09aQgc0NwKZuzUNlDG71BatiMH1JP61YfABOe1VLXIiT6ZqG9Ro+h/2cNT3QavpzN/zznUfoa9oYZr5r/Z/1I2vjeO2z8t1byRn3I5H8q+la5KytI1hsMCknABJPAA712+h6YNNswGH76T5pD/Ssnw1pPmOL6ZflU/uwe59a6esigooooAKKKKACiiigAooooAjubaG8t5ba4iSaGVSkkbjKupGCCO4xXxZ8dvhJN8MtXFzp8TvoF+5NvL18h+vksfb+E9x7ivteszxN4a0zxdod3omsWy3NldJsdD1HowPYg8g9jWlOo4MmUbn5yAE807pXb/FX4W6n8Ltdayug8+nzEtZ3u35Zl9D6OO4/EVxA5ruTTV0ZCZpcZFGKUcUgEwAKY5+Q09qjkPFJjILZ/lx6VZBqhA22R196uqQcVMWMmBGKeDUQ4pwNaJkkgOT7UoNMzxSBuadwJCaQmkJoyCeaYiC5QgLMn305+o9KmVw6BlOQeaRj2qCFvKlaHoD8y/1FTezGTsuaFIPBozx7005BpsD6otfEA8YfAaC8d91xDatZ3BPXzI+AT9RtP4144D+7AYjkAg1q/BvxB5nhjxb4Xlf/XWh1C2BP8cYw4H1U5/4DWRbtutI24B2j8a3wmnMjOtrZiucKx757+lQuQAB6+napSxJzkEY6VA5PmAnBGcV12MT3L9njUjJo+pWDMCYLgSKPZx/iDXr8o/fo3qMV88fAnUPsfi+5sycLd2pI/3kYH+TGvoiQ5SNvevHxUbVWdlJ3gjJ17i3Y9q+MPiLAbXx1rSdM3Jf8wD/AFr7N8QtiwkP4V8cfFKVX8fasqj7ropPqQgzRRHM5vJqOQ/KD70bqincgKBjk+tb30MrDXf1pFlAPzECmNz1b/vkUqRoSPl3f7xzWbZQSNm1aQZAKnHvUERwFX0FWb84gbPoB+tVYjipe40egfB248j4gaMc43TFPzU19haNpTalcfMCIEPzt6+wr5F+CPg/WfF3jvT/AOyoiIrGZLm5uWHyQoD3PqegFfdVvbRWkKwwrtRf19656+6LhsPRFjUIgCqowAOwpaKKxLCiiigAooooAKKKKACiiigAooooAxPGPg7R/HWhXGi61bCe2mGQejxN2dT2Ir4l+KPwp1n4X6ybW9VrjTpmP2S+VfklH90+jjuPxFfetZviHw5pXivSZ9I1myivLKdcPHIPyIPUEdiORWtOo4ehMo3PzmzjtSV6p8YfgTq3w2uJNQsRLqPh5m+S6Ay9vnosoHT2foe+DXlddaaaujO1gJFQyinsTUMjfKaTApbsXLe9X4myBWXI2LnNX7dsqKzgymWt1KG7io804cVqmSP3GlWmindKYD85pM80maXoKoQVDcRll3LwynIqYimMc0mCFjkEyK68Z/Sg1Wik8mcxn7r8j61aJyKSd0BpeGdYfQtatb5SdqEpIB/EjAqw/I11dpIJ7RNhztHBHcA1wK9a6/w3Oj6aqZJKkhgO1dGHfvEVNjTOM42jseKjI2klunUU4gKGOMHAPNIwDADBJrsMDpPhhe/YfHmjSM2FklaH/vpCP54r6oRs2qtXx3ol2bHXNNuSWHkXcUmcdBuGf0r68tpN9j1zgV5uOXvJnTh9minr+1tOAIBDyAYPfJr4r+IVyt34616ZcBTeSKPopx/SvsnxFdpb6SJpDhYz5mf93mvhzUbpr2/urpjkzzPIT9WJrGlsaTIi3eoZTlx9KkFRMf3h54rVkITHNPT7w71Hnn/GpEOSBUDI9Rb92Fz1YV0/ww+GOt/E/WxpulxmO3jIN1euv7u2T39WPZe/0rf+F3wP1z4r38c/z6foMLnz79l+/jqkQP3m9+g75PFfaPhHwho3gbQ4NF0KzS1tIR0HLSN3Z26sx7k1jUqWehUYlfwJ4E0b4eeH4dF0WDZGnzSzN/rJ37u57n+VdDRRXM3c0CiiigAooooAKKKKACiiigAooooAKKKKACiiigBk8EV1C8E8aSxSKVdHUMrKeoIPUV82/Fz9l4s02s+A4wM5eXSWOB/2xJ/9BP4elfStFVGbi9BNXPzWvbSexuJba7hlt7iJtskUqlWQ+hB6VRlPBr77+JfwY8L/ABNty2oW5tdSVcRahbgLKvs3Zx7GvkX4nfAzxd8NmlnurU6jpIPy6jaKWQD/AKaL1Q/Xj3roVRSI5bHlcp/fitC3PArOfmZavw9KUN2NloGnZzTAaUGtSSVaUk0xDk041QhC2DTw2ajagEChMCU9OKa3FKppSoIqtxFO5TKkj7wORU8EomiDd+/1okTINU4X+z3JQ8K54+tZ7Me6L9bXhe78q6khLYDjcPr3rFPSpbWf7LcxTdkYE/TvW0JcskyZK6O8b5lzkEnpTQGy2SBTovnjRwO1KwwCcDNeimc5Xl3FcjqOa+uPCl6NR8P2s+c+bAr5+q5r5Ilk2A5XrxX0z8I7w3fgjSmJyRbhCfccf0rgxy0TN8O9WjM+KGtJp/gbV5Sfnit3Vf8Aeb5f618gEnaM19B/H7WDb+Hp7FGAM96sTDPUD5v8K+fW61jBWRpJ3YgNQZySc9amkOIyfWuw+Hnwe8V/EqVDpNkYLDOH1C5BWBfXb3c+y/mKUmluJI4uKJ5ZUjiRpJHO1EQZZiegAHU19EfCD9mG61Iwa345je1tOHi0sHEkvp5pH3R/sjk+1ev/AAx+BHhf4aol1HF/aWsY+a/uVBZT6Rr0Qfr716RXNOr0iWo9yGysrbTbSGzsreK2toVCRxRKFVFHQADpU1FFYlhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABSOiSoyOoZWGCGGQRS0UAeJfEn9lTwh4yeXUNDP/CO6m+WJt0zbyN/tR8Y+qkfQ182eNvgj43+HbPJqmkvcWKni+ssywkepIGU/wCBAV+gFBUMCCAQeCD3q4zcRNXPzKUg9KDX3d41/Z+8BeNd802krp163P2rT8RMT6lR8p/KvDvF37InibTS83hvU7XV4RkiGf8AczY+vKmto1IslxZ4KhNPJ4rZ8QeBfFHhSUx65oGo2O3+N4SUP/AhkViowcfKQ30Oa1TJDrRSgYJoIpiANUinNQ4p6mmmA9hn1qjewZGR1/lV4GmSDcMGiSuhLQis5/OgGfvDhvrU454NZiP9ku8n7j8H2rROT0qYO6sNnY6DdC406NcndH8jc+nf8q0nOMsADXLeGLzyLp4WPEgyPqP/AK1dRgJE7M2wZ7nrXpUpXijnmrMpTMT7g19CfAa/87wYkW7Jt5pI/wAM5/rXh2meGta8QyrFpGlX167HAMUJK/8AfXT9a+gvgr8MvEfhjSruPXVhtBPN5scavvcAgZzjgdK58ZKPLZs0op3PC/2gNR87xQtmrfKjPKwPqcAVzvgr4ReMfH0ito+kSi0Jw17c/uoF/wCBH730UGvsdfhB4OfX21+90mPUdRIAEl386pj+6n3fzBrskRY0VEVVVRhQBgAegrglX0tE3UO54l4B/ZZ8M+HvKvPE0n/CQXykMInXZaof9zq//AuPava4IIrWFIYIkiiQbURFCqo9AB0p9FYSk5aspKwUUUVIwooooAKKKKACiiigAooooAKKKKAFpKKKACiiigApaKKAEooooAKKKKACiiigAooooAKWiigBksUc6GOWNJEPVWGQfwNcZ4g+DHw/8TFn1Hwvp5lbrLCnlP8AmuDRRTTa2A8/1j9kPwbd7m0zVNY01j0XzFmQfgwz+tcdqn7HGrxknTPFdlOOy3NqyH81Y/yooq1VkuouVHN3v7KXxDtSRCNFuwO8d2Vz/wB9IKyJv2a/ihCePD0Ug9Y72E/zYUUU/bSFyohX9nj4obsHwrL/AOBUH/xdTx/s3fE+X/mXI4/eS9hH8mNFFV7eQciLSfsl/Ee/wJItGtM9TLeFsf8AfKmup0b9jrxCURdV8UaZABwfs8Dyn82K0UVHtZXuHKjtfD/7I3hnTJ47jUde1a+kQ52x7IUP5An9a9L0X4T+C9C2m10K2kkXpJcZlb82zRRR7WdrXDlR1UMEVugjhiSJB0VFCgfgKfRRWZQUUUUAFFFFABRRRQAUUUUALSYoooAKKKKACiiigBaKKKAP/9k=",
+  status: "Open to opportunities",
+  roles: ["Student Entrepreneur", "Web Developer", "Team Lead at Trevox"],
+  lede: "College student leading Trevox, building technology-driven solutions from web platforms to machine learning tools.",
+  about: [
+    "I am Balamurugan, a college student leading Trevox, with a passion for developing technology-driven solutions.",
+    "My experience includes successfully handling 6+ projects while enhancing my skills in decision-making, collaboration, and business growth."
+  ],
+  stats: [
+    { n: 6, suf: "+", label: "Projects handled" },
+    { n: 2, suf: "", label: "Web dev internships" },
+    { n: 6, suf: "", label: "Certifications" },
+    { n: 7, suf: ".0", label: "CGPA (5th sem)" }
+  ],
+  skills: [
+    { group: "Programming", items: ["Java", "C", "C++", "Python"] },
+    { group: "Web", items: ["HTML", "CSS", "Node.js", "React.js", "MongoDB"] },
+    { group: "AI & Soft skills", items: ["Machine Learning", "Effective Communication", "Critical Thinking", "Teamwork"] }
+  ],
+  projects: [
+    { name: "E-Commerce Platform", desc: "A modern scalable e-commerce solution with advanced features.", stack: ["E-Commerce", "Scalable"], live: "", code: "" },
+    { name: "Corporate Website", desc: "User friendly and responsive website with modern technologies and UI/UX designs.", stack: ["Responsive", "UI/UX"], live: "", code: "" },
+    { name: "Tiles Store Website", desc: "Premium tiles showcase platform with detailed product catalog, WhatsApp inquiry integration and seamless customer experience.", stack: ["Product Catalog", "WhatsApp Inquiry"], live: "", code: "" },
+    { name: "Smart Job Matching Platform", desc: "A personalized job discovery system that recommends suitable opportunities based on user profiles and skills.", stack: ["Recommendations", "Personalization"], live: "", code: "" },
+    { name: "Medical Report Summarization Tool", desc: "A healthcare assistant tool that transforms technical medical data into concise and patient-friendly explanations.", stack: ["Healthcare", "Summarization"], live: "", code: "" },
+    { name: "Animal Classification System", desc: "An image processing model to detect and categorize cattle and buffaloes based on visual characteristics.", stack: ["Image Processing", "ML"], live: "", code: "" }
+  ],
+  journey: [
+    { when: "Now", title: "Leading Trevox", where: "Trevox · trevox.net", desc: "College student leading Trevox and handling 6+ projects." },
+    { when: "Now", title: "M.Sc. Software Systems (IV Year)", where: "Kongu Engineering College, Perundurai", desc: "7.00 CGPA up to the 5th semester." },
+    { when: "Internship", title: "Web Development Intern", where: "Tech Vedhu (AALAN INFO TECH)", desc: "Completed internship in Web Development." },
+    { when: "Internship", title: "Web Development Intern", where: "AcmeGrade", desc: "Completed internship in Web Development." },
+    { when: "2023", title: "HSC", where: "Kongu National MHSS, Erode", desc: "80%." },
+    { when: "2021", title: "SSLC", where: "Kongu National MHSS, Erode", desc: "64%." }
+  ],
+  certs: [
+    "Oracle Certified Foundations Associate - Java",
+    "AWS Cloud Essentials",
+    "Deloitte Cyber Security Virtual Experience Program - Forage",
+    "Data Structures Using Java",
+    "C++ Programming - Great Learning",
+    "NASSCOM Certification - Testing Tools, Selenium with Java, Python & API Testing",
+    "NPTEL exam: AI in HR Management"
+  ],
+  languages: [{ n: "English", l: "Fluent" }, { n: "Tamil", l: "Fluent" }],
+  email: "balamanivasakan@gmail.com",
+  phone: "63696-27698",
+  location: "Erode, Tamil Nadu",
+  socials: [
+    { label: "Trevox", url: "https://trevox.net" },
+    { label: "Portfolio", url: "https://balamurugan-portfolio-iota.vercel.app" }
+  ]
+};
+
+</script>
+<script>
+(() => {
+const P = PROFILE;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* ---------- Render content ---------- */
+$("#status").textContent = P.status;
+let i = 0;
+const nameHTML = (word, cls) => word.split("").map(ch => `<span class="ch ${cls}" style="animation-delay:${(i++) * 45}ms">${esc(ch)}</span>`).join("");
+$("#name").innerHTML = nameHTML(P.first, "") + "<br>" + nameHTML(P.last + ".", "outline");
+$("#lede").textContent = P.lede;
+$("#aboutText").innerHTML = P.about.map(p => `<p>${esc(p)}</p>`).join("");
+$("#stats").innerHTML = `<div class="glass photo reveal"><img src="${P.photo}" alt="Balamurugan M" width="96" height="96"><div><b>${esc(P.first)} ${esc(P.last)}</b><span>${esc(P.roles[0])}</span></div></div>` + P.stats.map(s => `<div class="glass stat reveal"><b data-n="${s.n}">${s.n}<sup>${esc(s.suf)}</sup></b><span>${esc(s.label)}</span></div>`).join("");
+$("#skillGroups").innerHTML = P.skills.map(g => `<div class="glass skill-group reveal"><h3>${esc(g.group)}<small>${g.items.length} skills</small></h3><div class="chips">${g.items.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div></div>`).join("");
+$("#projCount").textContent = P.projects.length + " projects";
+$("#projects").innerHTML = P.projects.map((p, k) => `
+  <article class="glass card reveal">
+    <div class="art"><canvas data-seed="${k}"></canvas><span class="no">${String(k + 1).padStart(2, "0")}</span></div>
+    <div class="body">
+      <h3>${esc(p.name)}</h3>
+      <p>${esc(p.desc)}</p>
+      <div class="stack">${p.stack.map(s => `<span>${esc(s)}</span>`).join("")}</div>
+      ${(p.live || p.code) ? `<div class="links">${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noopener">Live ↗</a>` : ""}${p.code ? `<a href="${esc(p.code)}" target="_blank" rel="noopener">Code ↗</a>` : ""}</div>` : ""}
+    </div>
+    <div class="glare"></div>
+  </article>`).join("");
+$("#timeline").innerHTML = P.journey.map(t => `<div class="glass t-item reveal"><div class="when">${esc(t.when)}</div><div><h3>${esc(t.title)}</h3><div class="where">${esc(t.where)}</div></div><p>${esc(t.desc)}</p></div>`).join("");
+$("#mail").textContent = P.email;
+$("#phone").textContent = P.phone; $("#loc").textContent = P.location;
+$("#certList").innerHTML = P.certs.map(c => `<li>${esc(c)}</li>`).join("");
+$("#langList").innerHTML = P.languages.map(l => `<div>${esc(l.n)}<small>${esc(l.l)}</small></div>`).join("");
+$("#socials").innerHTML = P.socials.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)} ↗</a>`).join("");
+$("#foot").textContent = `© ${new Date().getFullYear()} ${P.first} ${P.last}`;
+
+$("#copyMail").addEventListener("click", () => {
+  const t = $("#toast");
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents($("#mail")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); t.textContent = "Selected, press Ctrl+C"; };
+  try { navigator.clipboard.writeText(P.email).then(() => t.textContent = "Copied", fallback); } catch (e) { fallback(); }
+});
+
+/* ---------- Typing roles ---------- */
+const roleEl = $("#roleText");
+if (reduce) roleEl.textContent = P.roles[0];
+else {
+  let r = 0, c = 0, del = false;
+  (function type() {
+    const word = P.roles[r];
+    c += del ? -1 : 1;
+    roleEl.textContent = word.slice(0, c);
+    let wait = del ? 40 : 85;
+    if (!del && c === word.length) { del = true; wait = 1600; }
+    else if (del && c === 0) { del = false; r = (r + 1) % P.roles.length; wait = 300; }
+    setTimeout(type, wait);
+  })();
+}
+
+/* ---------- Reveal (content is visible at rest; this only adds a lift) ---------- */
+if (!reduce && "IntersectionObserver" in window) {
+  const els = [...document.querySelectorAll(".reveal")];
+  const vh = innerHeight;
+  els.forEach(el => { if (el.getBoundingClientRect().top > vh) el.classList.add("pre"); });
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.remove("pre"); io.unobserve(e.target); } }), { threshold: .1 });
+  els.forEach(el => io.observe(el));
+}
+
+/* ---------- Count-up stats ---------- */
+if (!reduce && "IntersectionObserver" in window) {
+  const io2 = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return; io2.unobserve(e.target);
+    const b = e.target, n = +b.dataset.n, sup = b.querySelector("sup").outerHTML, t0 = performance.now();
+    (function step(t) { const k = Math.min(1, (t - t0) / 1400); b.innerHTML = Math.round(n * (1 - Math.pow(1 - k, 3))) + sup; if (k < 1) requestAnimationFrame(step); })(t0);
+  }), { threshold: .6 });
+  document.querySelectorAll(".stat b").forEach(b => io2.observe(b));
+}
+
+/* ---------- 3D skill sphere ---------- */
+const sphere = $("#sphere");
+const all = P.skills.flatMap(g => g.items);
+const tags = all.map((t, k) => { const s = document.createElement("span"); s.textContent = t; if (k % 3 === 0) s.classList.add("hot"); sphere.appendChild(s); return s; });
+const pts = tags.map((_, k) => { const n = tags.length, phi = Math.acos(-1 + (2 * k + 1) / n), th = Math.sqrt(n * Math.PI) * phi; return [Math.cos(th) * Math.sin(phi), Math.sin(th) * Math.sin(phi), Math.cos(phi)]; });
+let ax = 0.004, ay = 0.006, drag = null;
+function rot(p, a, b) {
+  let [x, y, z] = p;
+  let y1 = y * Math.cos(a) - z * Math.sin(a), z1 = y * Math.sin(a) + z * Math.cos(a);
+  let x2 = x * Math.cos(b) + z1 * Math.sin(b), z2 = -x * Math.sin(b) + z1 * Math.cos(b);
+  return [x2, y1, z2];
+}
+function drawSphere() {
+  const R = sphere.clientWidth * (innerWidth < 600 ? 0.3 : 0.36);
+  pts.forEach((p, k) => {
+    const [x, y, z] = p, s = (z + 2) / 3;
+    tags[k].style.transform = `translate(-50%,-50%) translate3d(${x * R}px,${y * R}px,${z * R}px) scale(${0.7 + s * 0.45})`;
+    tags[k].style.opacity = (0.25 + s * 0.75).toFixed(2);
+    tags[k].style.zIndex = Math.round(s * 100);
+  });
+}
+sphere.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY }; sphere.setPointerCapture(e.pointerId); sphere.style.cursor = "grabbing"; });
+sphere.addEventListener("pointermove", e => { if (!drag) return; ay = (e.clientX - drag.x) * 0.0006; ax = -(e.clientY - drag.y) * 0.0006; drag = { x: e.clientX, y: e.clientY }; });
+const endDrag = () => { drag = null; sphere.style.cursor = ""; };
+sphere.addEventListener("pointerup", endDrag); sphere.addEventListener("pointercancel", endDrag);
+drawSphere();
+
+/* ---------- Tilt cards ---------- */
+if (matchMedia("(hover: hover)").matches && !reduce) {
+  document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("pointermove", e => {
+      const r = card.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      card.style.transform = `rotateY(${(px - .5) * 14}deg) rotateX(${(.5 - py) * 12}deg) translateZ(10px)`;
+      card.style.setProperty("--gx", px * 100 + "%"); card.style.setProperty("--gy", py * 100 + "%");
+    });
+    card.addEventListener("pointerleave", () => card.style.transform = "");
+  });
+  const cur = $(".cursor");
+  addEventListener("pointermove", e => { cur.style.opacity = 1; cur.style.left = e.clientX + "px"; cur.style.top = e.clientY + "px"; });
+}
+
+/* ---------- Project card mini-3D art (2D canvas wireframes) ---------- */
+const cards = [...document.querySelectorAll(".card canvas")];
+const shapes = [
+  () => { const v = []; for (let a = 0; a < 24; a++) for (let b = 0; b < 12; b++) { const u = a / 24 * Math.PI * 2, w = b / 12 * Math.PI * 2; v.push([(1 + .4 * Math.cos(w)) * Math.cos(u), .4 * Math.sin(w), (1 + .4 * Math.cos(w)) * Math.sin(u)]); } return v; },
+  () => { const v = []; for (let k = 0; k < 220; k++) { const n = 220, phi = Math.acos(-1 + 2 * k / n), th = Math.sqrt(n * Math.PI) * phi; v.push([Math.cos(th) * Math.sin(phi), Math.sin(th) * Math.sin(phi), Math.cos(phi)]); } return v; },
+  () => { const v = []; for (let x = -4; x <= 4; x++) for (let y = -4; y <= 4; y++) for (let z = -4; z <= 4; z += 2) v.push([x / 4, y / 4, z / 4]); return v; },
+  () => { const v = []; for (let k = 0; k < 260; k++) { const t = k / 260 * Math.PI * 8; v.push([Math.cos(t) * .9, (k / 260) * 2 - 1, Math.sin(t) * .9]); } return v; }
+];
+const cardData = cards.map(c => ({ c, ctx: c.getContext("2d"), pts: shapes[(+c.dataset.seed) % shapes.length](), hue: [188, 172, 252, 200][(+c.dataset.seed) % 4] }));
+function sizeCards() { cardData.forEach(d => { const r = d.c.getBoundingClientRect(), dpr = Math.min(devicePixelRatio, 2); d.c.width = r.width * dpr; d.c.height = r.height * dpr; d.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); d.w = r.width; d.h = r.height; }); }
+function drawCards(t) {
+  cardData.forEach((d, k) => {
+    const { ctx, w, h } = d; ctx.clearRect(0, 0, w, h);
+    const a = t * .0004 + k, b = t * .0003, S = Math.min(w, h) * .62;
+    for (const p of d.pts) {
+      const [x, y, z] = rot(p, a * .7, b + k);
+      const s = 2.6 / (2.6 + z), X = w / 2 + x * S * s * .9 + w * .15, Y = h / 2 + y * S * s * .9;
+      const al = (0.25 + (1 - (z + 1) / 2) * 0.75);
+      ctx.fillStyle = `hsla(${d.hue},95%,${62 + (1 - z) * 8}%,${al})`;
+      ctx.beginPath(); ctx.arc(X, Y, 1.3 * s, 0, 7); ctx.fill();
+    }
+  });
+}
+sizeCards(); addEventListener("resize", sizeCards);
+
+/* ---------- Main WebGL stage ---------- */
+let render3D = () => {};
+if (window.THREE) {
+  const canvas = $("#stage");
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearColor(0x07090d, 1);
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x07090d, 0.04);
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 120);
+  camera.position.set(0, 0, 9);
+  const CYAN = 0x22d3ee, ICE = 0xa5f3fc, VIOLET = 0x8f7bff;
+  const additive = (o) => Object.assign({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }, o);
+
+  /* 1. Network globe: nodes on a sphere, linked to near neighbours, with data packets running along the links */
+  const globe = new THREE.Group();
+  const R = 2.3, NODES = 240, nodes = [];
+  for (let k = 0; k < NODES; k++) {
+    const phi = Math.acos(-1 + (2 * k + 1) / NODES), th = Math.sqrt(NODES * Math.PI) * phi;
+    nodes.push(new THREE.Vector3(Math.cos(th) * Math.sin(phi), Math.sin(th) * Math.sin(phi), Math.cos(phi)).multiplyScalar(R));
+  }
+  const nodeGeo = new THREE.BufferGeometry().setFromPoints(nodes);
+  globe.add(new THREE.Points(nodeGeo, new THREE.PointsMaterial(additive({ color: ICE, size: .07, opacity: .95 }))));
+  const edges = [];
+  for (let a = 0; a < NODES; a++) for (let b = a + 1; b < NODES; b++) if (nodes[a].distanceTo(nodes[b]) < .62) edges.push([a, b]);
+  const linePos = new Float32Array(edges.length * 6);
+  edges.forEach(([a, b], k) => { nodes[a].toArray(linePos, k * 6); nodes[b].toArray(linePos, k * 6 + 3); });
+  const lineGeo = new THREE.BufferGeometry(); lineGeo.setAttribute("position", new THREE.BufferAttribute(linePos, 3));
+  globe.add(new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial(additive({ color: CYAN, opacity: .22 }))));
+  // inner holographic shell with scanlines
+  const holoU = { uTime: { value: 0 } };
+  const holo = new THREE.Mesh(new THREE.SphereGeometry(R * .96, 64, 48), new THREE.ShaderMaterial({
+    uniforms: holoU, ...additive({ side: THREE.DoubleSide }),
+    vertexShader: `varying vec3 vN; varying vec3 vV; varying vec3 vP;
+      void main(){ vP = position; vec4 mv = modelViewMatrix * vec4(position,1.); vN = normalize(normalMatrix*normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix*mv; }`,
+    fragmentShader: `uniform float uTime; varying vec3 vN; varying vec3 vV; varying vec3 vP;
+      void main(){ float f = pow(1. - abs(dot(vN, vV)), 2.5);
+        float scan = smoothstep(.0,.08, abs(fract(vP.y*6. - uTime*.6) - .5) - .38);
+        float band = exp(-pow((vP.y - mod(uTime*1.2, 6.) + 3.)*2.2, 2.));
+        vec3 c = mix(vec3(.13,.83,.93), vec3(.56,.48,1.), vP.y*.2+.5);
+        gl_FragColor = vec4(c, f*.55 + scan*f*.35 + band*.35); }`
+  }));
+  globe.add(holo);
+  // equator rings with tick marks, like a HUD
+  const hud = new THREE.Group();
+  const ring = (r, op, col) => new THREE.Mesh(new THREE.RingGeometry(r, r + .012, 160), new THREE.MeshBasicMaterial(additive({ color: col, opacity: op, side: THREE.DoubleSide })));
+  const r1 = ring(R * 1.35, .55, CYAN), r2 = ring(R * 1.55, .25, VIOLET);
+  const ticks = [];
+  for (let k = 0; k < 72; k++) { const a = k / 72 * Math.PI * 2, l = k % 6 === 0 ? .16 : .06; ticks.push(Math.cos(a) * R * 1.42, Math.sin(a) * R * 1.42, 0, Math.cos(a) * (R * 1.42 + l), Math.sin(a) * (R * 1.42 + l), 0); }
+  const tickGeo = new THREE.BufferGeometry(); tickGeo.setAttribute("position", new THREE.Float32BufferAttribute(ticks, 3));
+  const tickLines = new THREE.LineSegments(tickGeo, new THREE.LineBasicMaterial(additive({ color: ICE, opacity: .45 })));
+  hud.add(r1, r2, tickLines); hud.rotation.x = Math.PI / 2.3;
+  globe.add(hud);
+  // data packets travelling along random links
+  const PK = 70, pkPos = new Float32Array(PK * 3), packets = [];
+  for (let k = 0; k < PK; k++) packets.push({ e: edges[(Math.random() * edges.length) | 0], t: Math.random(), s: .008 + Math.random() * .02 });
+  const pkGeo = new THREE.BufferGeometry(); pkGeo.setAttribute("position", new THREE.BufferAttribute(pkPos, 3));
+  globe.add(new THREE.Points(pkGeo, new THREE.PointsMaterial(additive({ color: 0xffffff, size: .11, opacity: 1 }))));
+  const tmp = new THREE.Vector3();
+  function stepPackets() {
+    packets.forEach((p, k) => {
+      p.t += p.s;
+      if (p.t >= 1) { // hop to a link that starts at the node we reached
+        const end = p.e[1], next = edges.filter(e => e[0] === end || e[1] === end);
+        const n = next[(Math.random() * next.length) | 0] || edges[(Math.random() * edges.length) | 0];
+        p.e = n[0] === end ? n : [n[1], n[0]]; p.t = 0;
+      }
+      tmp.lerpVectors(nodes[p.e[0]], nodes[p.e[1]], p.t).toArray(pkPos, k * 3);
+    });
+    pkGeo.attributes.position.needsUpdate = true;
+  }
+  scene.add(globe);
+
+  /* 2. Circuit board floor: grid + Manhattan traces with light pulses running through them */
+  const board = new THREE.Group();
+  const grid = new THREE.GridHelper(60, 60, CYAN, 0x1b2a33);
+  grid.material.transparent = true; grid.material.opacity = .18; grid.material.depthWrite = false;
+  board.add(grid);
+  const tracePos = [], traceProg = [];
+  for (let k = 0; k < 70; k++) {
+    let x = Math.round((Math.random() - .5) * 40), z = Math.round((Math.random() - .5) * 40), d = 0;
+    const segs = 4 + (Math.random() * 6 | 0), len = [];
+    const pts = [[x, z]];
+    for (let s = 0; s < segs; s++) {
+      const L = 1 + (Math.random() * 3 | 0);
+      const dir = s % 2 === 0 ? [Math.random() < .5 ? -1 : 1, 0] : [0, Math.random() < .5 ? -1 : 1];
+      x += dir[0] * L; z += dir[1] * L; pts.push([x, z]);
+    }
+    let total = 0; for (let s = 1; s < pts.length; s++) total += Math.abs(pts[s][0] - pts[s - 1][0]) + Math.abs(pts[s][1] - pts[s - 1][1]);
+    const off = Math.random();
+    for (let s = 1; s < pts.length; s++) {
+      const seg = Math.abs(pts[s][0] - pts[s - 1][0]) + Math.abs(pts[s][1] - pts[s - 1][1]);
+      tracePos.push(pts[s - 1][0], .01, pts[s - 1][1], pts[s][0], .01, pts[s][1]);
+      traceProg.push(d / total + off, (d + seg) / total + off); d += seg;
+    }
+  }
+  const traceGeo = new THREE.BufferGeometry();
+  traceGeo.setAttribute("position", new THREE.Float32BufferAttribute(tracePos, 3));
+  traceGeo.setAttribute("prog", new THREE.Float32BufferAttribute(traceProg, 1));
+  const traceU = { uTime: { value: 0 } };
+  board.add(new THREE.LineSegments(traceGeo, new THREE.ShaderMaterial({
+    uniforms: traceU, ...additive({}),
+    vertexShader: `attribute float prog; varying float vP; void main(){ vP = prog; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader: `uniform float uTime; varying float vP;
+      void main(){ float p = fract(vP - uTime*.25); float head = smoothstep(.85,1.,p);
+        gl_FragColor = vec4(mix(vec3(.13,.83,.93)*.25, vec3(.65,.95,1.), head), .25 + head*.9); }`
+  })));
+  board.position.y = -4.2; board.position.z = -6;
+  scene.add(board);
+
+  /* 3. Floating code tokens */
+  const words = ["</>", "{ }", "=>", "const", "npm run dev", "git push", "async", "200 OK", "<div>", "useState()", "SELECT *", "0101", "API", "deploy()", "#!", "() =>"];
+  const tokens = words.map((w, k) => {
+    const c = document.createElement("canvas"), x = c.getContext("2d"); c.width = 512; c.height = 128;
+    x.font = "500 56px JetBrains Mono, monospace"; x.textAlign = "center"; x.textBaseline = "middle";
+    x.shadowColor = k % 3 === 0 ? "#8f7bff" : "#22d3ee"; x.shadowBlur = 18;
+    x.fillStyle = k % 3 === 0 ? "#c4b8ff" : "#a5f3fc"; x.fillText(w, 256, 64);
+    const tex = new THREE.CanvasTexture(c);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial(additive({ map: tex, opacity: .55 })));
+    sp.scale.set(2, .5, 1);
+    sp.position.set((Math.random() - .5) * 18, (Math.random() - .5) * 30 - 8, -2 - Math.random() * 8);
+    sp.userData = { f: Math.random() * 6, v: .002 + Math.random() * .004 };
+    scene.add(sp); return sp;
+  });
+
+  /* 4. Binary dust */
+  const N = innerWidth < 700 ? 1200 : 2400, pos = new Float32Array(N * 3);
+  for (let k = 0; k < N; k++) { pos[k * 3] = (Math.random() - .5) * 60; pos[k * 3 + 1] = (Math.random() - .5) * 60 - 10; pos[k * 3 + 2] = -Math.random() * 30; }
+  const dustGeo = new THREE.BufferGeometry(); dustGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial(additive({ color: 0x5eead4, size: .045, opacity: .6 })));
+  scene.add(dust);
+
+  const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+  addEventListener("pointermove", e => { mouse.tx = e.clientX / innerWidth * 2 - 1; mouse.ty = e.clientY / innerHeight * 2 - 1; });
+  function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+  resize(); addEventListener("resize", resize);
+
+  let sp = 0;
+  render3D = (t) => {
+    const time = t * .001;
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    sp += (scrollY / max - sp) * .08;
+    mouse.x += (mouse.tx - mouse.x) * .05; mouse.y += (mouse.ty - mouse.y) * .05;
+    holoU.uTime.value = time; traceU.uTime.value = time;
+    stepPackets();
+    const wide = innerWidth > 820;
+    globe.scale.setScalar(wide ? 1 : .6);
+    globe.position.x = (wide ? 3.3 : 1.1) * Math.cos(sp * Math.PI * 2.2);
+    globe.position.y = (wide ? .1 : -3.4) + Math.sin(time * .6) * .1 - sp * 1.2;
+    globe.position.z = -sp * 3 - (wide ? 0 : 2);
+    globe.rotation.y = time * .15 + sp * 5 + mouse.x * .4;
+    globe.rotation.x = .25 + mouse.y * .25;
+    hud.rotation.z = -time * .3;
+    r2.rotation.z = time * .5;
+    board.rotation.y = sp * .6;
+    board.position.y = -4.2 + sp * 2;
+    tokens.forEach(s => { s.position.y += s.userData.v; if (s.position.y > 12) s.position.y = -24; s.material.opacity = .35 + Math.sin(time * 1.5 + s.userData.f) * .2; });
+    dust.position.y = sp * 10; dust.rotation.y = time * .01;
+    scene.position.y = sp * 8;
+    globe.position.y -= sp * 8; board.position.y -= sp * 8 * .3;
+    camera.position.x = mouse.x * .6; camera.position.y = -mouse.y * .4 + .3;
+    camera.lookAt(0, -.3, 0);
+    renderer.render(scene, camera);
+  };
+}
+
+/* ---------- Loop ---------- */
+function frame(t) {
+  if (!drag) { ax *= 0.98; ay *= 0.98; if (Math.abs(ay) < .003) ay = ay < 0 ? -.003 : .003; if (Math.abs(ax) < .002) ax = ax < 0 ? -.002 : .002; }
+  for (let k = 0; k < pts.length; k++) pts[k] = rot(pts[k], ax, ay);
+  drawSphere();
+  drawCards(t);
+  render3D(t);
+  if (!reduce) requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ---------- Active nav ---------- */
+const links = [...document.querySelectorAll("nav a")];
+const io3 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-45% 0px -50% 0px" });
+document.querySelectorAll("main section[id]").forEach(s => io3.observe(s));
+})();
+</script>
