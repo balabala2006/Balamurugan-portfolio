@@ -644,16 +644,15 @@ if (window.THREE) {
 
   /* 3. Floating code tokens */
   const words = ["</>", "{ }", "=>", "const", "npm run dev", "git push", "async", "200 OK", "<div>", "useState()", "SELECT *", "0101", "API", "deploy()", "#!", "() =>"];
-  const tokens = words.map((w, k) => {
+  const tokens = (innerWidth < 700 ? words.concat(words) : words).map((w, k) => {
     const c = document.createElement("canvas"), x = c.getContext("2d"); c.width = 512; c.height = 128;
     x.font = "500 56px JetBrains Mono, monospace"; x.textAlign = "center"; x.textBaseline = "middle";
     x.shadowColor = k % 3 === 0 ? "#8f7bff" : "#22d3ee"; x.shadowBlur = 18;
     x.fillStyle = k % 3 === 0 ? "#c4b8ff" : "#a5f3fc"; x.fillText(w, 256, 64);
     const tex = new THREE.CanvasTexture(c);
     const sp = new THREE.Sprite(new THREE.SpriteMaterial(additive({ map: tex, opacity: .55 })));
-    sp.scale.set(2, .5, 1);
-    sp.position.set((Math.random() - .5) * 18, (Math.random() - .5) * 30 - 8, -2 - Math.random() * 8);
-    sp.userData = { f: Math.random() * 6, v: .002 + Math.random() * .004 };
+    sp.position.set(0, (Math.random() - .5) * (innerWidth < 700 ? 22 : 30) - 8, -1 - Math.random() * 5);
+    sp.userData = { f: Math.random() * 6, v: .002 + Math.random() * .004, nx: (Math.random() - .5) * .9 };
     scene.add(sp); return sp;
   });
 
@@ -666,12 +665,17 @@ if (window.THREE) {
 
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
   addEventListener("pointermove", e => { mouse.tx = e.clientX / innerWidth * 2 - 1; mouse.ty = e.clientY / innerHeight * 2 - 1; });
-  function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+  function resize() {
+    const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+    // keep code tokens inside the visible width at their depth, larger on phones
+    const vh = 2 * Math.tan(camera.fov * Math.PI / 360);
+    tokens.forEach(t => { const vw = vh * (camera.position.z - t.position.z) * camera.aspect; t.position.x = t.userData.nx * vw; const k = w < 700 ? 1.5 : 1; t.scale.set(2 * k, .5 * k, 1); });
+  }
   resize(); addEventListener("resize", resize);
 
   let sp = 0;
   render3D = (t) => {
-    const time = t * .001;
+    const time = t * (reduce ? .00025 : .001);
     const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
     sp += (scrollY / max - sp) * .08;
     mouse.x += (mouse.tx - mouse.x) * .05; mouse.y += (mouse.ty - mouse.y) * .05;
@@ -688,7 +692,7 @@ if (window.THREE) {
     r2.rotation.z = time * .5;
     board.rotation.y = sp * .6;
     board.position.y = -4.2 + sp * 2;
-    tokens.forEach(s => { s.position.y += s.userData.v; if (s.position.y > 12) s.position.y = -24; s.material.opacity = .35 + Math.sin(time * 1.5 + s.userData.f) * .2; });
+    tokens.forEach(s => { s.position.y += s.userData.v; if (s.position.y > 12) s.position.y = -24; s.material.opacity = (innerWidth < 700 ? .55 : .35) + Math.sin(time * 1.5 + s.userData.f) * .2; });
     dust.position.y = sp * 10; dust.rotation.y = time * .01;
     scene.position.y = sp * 8;
     globe.position.y -= sp * 8; board.position.y -= sp * 8 * .3;
@@ -705,7 +709,7 @@ function frame(t) {
   drawSphere();
   drawCards(t);
   render3D(t);
-  if (!reduce) requestAnimationFrame(frame);
+  requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
 
